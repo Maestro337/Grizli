@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.entities.Member;
 
 public class PermissionChecker {
 
-    public static boolean checkPermission(Member member, Permission permission) {
+    public static boolean hasPermission(Member member, Permission permission) {
         return member.hasPermission(permission);
     }
 }
