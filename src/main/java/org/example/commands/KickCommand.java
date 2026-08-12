@@ -2,6 +2,7 @@ package org.example.commands;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.example.util.PermissionChecker;
 
@@ -17,8 +18,19 @@ public class KickCommand implements Command {
             return;
         }
 
-        //todo
-        event.reply("Команды /kick пока не релизована до конца").setEphemeral(true).queue();
+        User targetUser = event.getOption("user").getAsUser();
+        String reason = event.getOption("reason") != null
+                ? event.getOption("reason").getAsString()
+                : "Причина указана";
 
+        event.getGuild().kick(targetUser)
+                .reason(reason)
+                .queue(
+
+                  success -> event.reply("Пользователь " + targetUser.getAsTag() + "Кикнуть. Причина: " + reason).queue(),
+                        error -> event.reply("Не удалось кикнуть пользователя: " + error.getMessage()).setEphemeral(true).queue()
+
+
+                );
     }
 }
