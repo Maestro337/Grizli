@@ -27,6 +27,9 @@ public class Main {
 
                     Commands.slash("kick", "Кикнуть участника с сервера")
                             .addOption(OptionType.USER, "user", "Кого кикнуть", true)
+                            .addOption(OptionType.STRING, "reason", "Причина", false),
+                    Commands.slash("ban", "Забанить участника сервера")
+                            .addOption(OptionType.USER, "user", "Кого забанить", true)
                             .addOption(OptionType.STRING, "reason", "Причина", false)
 
             ).queue();
