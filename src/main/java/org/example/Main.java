@@ -10,7 +10,7 @@ import org.example.listeners.CommandListener;
 
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         String token = System.getenv("DISCORD_TOKEN");
 

@@ -2,9 +2,11 @@ package org.example.commands;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.example.util.PermissionChecker;
 
+import java.util.concurrent.TimeUnit;
 
 public class BanCommand implements Command {
 
@@ -20,9 +22,17 @@ public class BanCommand implements Command {
 
         }
 
-        //todo
-        event.reply("Команда /ban пока не реализованна до конца").setEphemeral(true).queue();
+        User targetUser = event.getOption("user").getAsUser();
+        String reason = event.getOption("reason") != null
+                ?event.getOption("reason").getAsString()
+                : "Причина не указана";
 
+        event.getGuild().ban(targetUser, 0, TimeUnit.DAYS)
+                .reason(reason)
+                .queue(
+                        success -> event.reply("Пользователь" + targetUser.getAsTag() + "забанен. Причина: " + reason).queue(),
+                        error -> event.reply(" Не удалось забанить пользователя: " + error.getMessage()).setEphemeral(true).queue()
+                );
     }
 
 }
