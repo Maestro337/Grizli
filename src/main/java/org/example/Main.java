@@ -30,8 +30,10 @@ public class Main {
                             .addOption(OptionType.STRING, "reason", "Причина", false),
                     Commands.slash("ban", "Забанить участника сервера")
                             .addOption(OptionType.USER, "user", "Кого забанить", true)
-                            .addOption(OptionType.STRING, "reason", "Причина", false)
-
+                            .addOption(OptionType.STRING, "reason", "Причина", false),
+                    Commands.slash("mute", "Замутить участника на время")
+                            .addOption(OptionType.USER, "user", "Кого замутить", true)
+                            .addOption(OptionType.INTEGER, "minutes", "На сколько минут", true)
             ).queue();
         }
         
