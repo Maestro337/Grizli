@@ -23,6 +23,13 @@ public class MuteCommand  implements Command{
         Member targetMember = event.getOption("user").getAsMember();
         int minutes = (int) event.getOption("minutes").getAsLong();
 
+        if(minutes <= 0 || minutes > 40320){
+
+            event.reply("Время мута должно быть от 1 минуты до 28 дней").setEphemeral(true).queue();
+            return;
+
+        }
+
         if (targetMember == null) {
             event.reply("Не удалось найти этого участника на сервере").setEphemeral(true).queue();
             return;
