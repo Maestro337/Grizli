@@ -16,6 +16,7 @@ public class Main {
 
         JDA jda = JDABuilder.createDefault(token)
                 .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT)
+                .addEventListeners(new CommandListener())
                 .build();
 
         jda.awaitReady();
