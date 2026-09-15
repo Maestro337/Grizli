@@ -5,8 +5,12 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.example.util.PermissionChecker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class KickCommand implements Command {
+
+    private static final Logger log = LoggerFactory.getLogger(KickCommand.class);
 
     @Override
     public void execute(SlashCommandInteractionEvent event){
@@ -28,8 +32,9 @@ public class KickCommand implements Command {
                 .queue(
 
                   success -> event.reply("Пользователь " + targetUser.getAsTag() + "Кикнуть. Причина: " + reason).queue(),
-                        error -> event.reply("Не удалось кикнуть пользователя: " + error.getMessage()).setEphemeral(true).queue()
-
+                        error ->{
+                                log.error("Не удалось кикнуть пользователя {}", targetUser.getAsTag(), error);
+                                event.reply("Не удалось кикнуть пользователя: " + error.getMessage()).setEphemeral(true).queue();}
 
                 );
     }

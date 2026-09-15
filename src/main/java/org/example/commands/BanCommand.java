@@ -5,10 +5,14 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.example.util.PermissionChecker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 
 public class BanCommand implements Command {
+
+    private static final Logger log = LoggerFactory.getLogger(BanCommand.class);
 
     @Override
     public void execute(SlashCommandInteractionEvent event){

@@ -7,9 +7,14 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.example.listeners.CommandListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class Main {
+
+    private static final Logger log = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args) throws InterruptedException {
 
         String token = System.getenv("DISCORD_TOKEN");
@@ -20,7 +25,7 @@ public class Main {
                 .build();
 
         jda.awaitReady();
-        System.out.println("Grizli запущен как " + jda.getSelfUser().getName());
+        log.info("Grizli запущен как {} ", jda.getSelfUser().getName());
 
         for(Guild guild : jda.getGuilds()){
 
