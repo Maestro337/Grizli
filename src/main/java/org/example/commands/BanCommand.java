@@ -10,32 +10,41 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 
-public class BanCommand implements Command {
+public class BanCommand extends ModerationCommand {
 
     private static final Logger log = LoggerFactory.getLogger(BanCommand.class);
 
     @Override
-    public void execute(SlashCommandInteractionEvent event){
+    protected Permission permission() {
 
-        Member executor = event.getMember();
+        return Permission.BAN_MEMBERS;
 
-        if(executor == null || !PermissionChecker.hasPermission(executor, Permission.BAN_MEMBERS )){
+    }
 
-            event.reply("У тебя нету прав на бан участников").setEphemeral(true).queue();
-            return;
+    @Override
+    protected String denyMessage() {
 
-        }
+        return "У тебя нету прав на бан участников";
+
+    }
+
+    @Override
+    protected void run(SlashCommandInteractionEvent event, Member executor) {
 
         User targetUser = event.getOption("user").getAsUser();
+
         String reason = event.getOption("reason") != null
-                ?event.getOption("reason").getAsString()
+                ? event.getOption("reason").getAsString()
                 : "Причина не указана";
 
         event.getGuild().ban(targetUser, 0, TimeUnit.DAYS)
                 .reason(reason)
                 .queue(
                         success -> event.reply("Пользователь" + targetUser.getAsTag() + "забанен. Причина: " + reason).queue(),
-                        error -> event.reply(" Не удалось забанить пользователя: " + error.getMessage()).setEphemeral(true).queue()
+                        error -> {
+                            log.error("Не удалось забанить пользователя {}", targetUser.getAsTag(), error);
+                            event.reply(" Не удалось забанить пользователя: " + error.getMessage()).setEphemeral(true).queue();
+                        }
                 );
     }
 

@@ -8,21 +8,29 @@ import org.example.util.PermissionChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KickCommand implements Command {
+public class KickCommand extends ModerationCommand {
 
     private static final Logger log = LoggerFactory.getLogger(KickCommand.class);
 
     @Override
-    public void execute(SlashCommandInteractionEvent event){
+    protected Permission permission() {
 
-        Member executor = event.getMember();
+        return Permission.KICK_MEMBERS;
 
-        if(executor == null || !PermissionChecker.hasPermission(executor, Permission.KICK_MEMBERS)){
-            event.reply("У тебя нету прав на исключение участников").setEphemeral(true).queue();
-            return;
-        }
+    }
+
+    @Override
+    protected String denyMessage(){
+
+        return "У тебя нету прав на исключение участников";
+
+    }
+
+    @Override
+    protected void run(SlashCommandInteractionEvent event, Member executor) {
 
         User targetUser = event.getOption("user").getAsUser();
+
         String reason = event.getOption("reason") != null
                 ? event.getOption("reason").getAsString()
                 : "Причина указана";
@@ -30,12 +38,12 @@ public class KickCommand implements Command {
         event.getGuild().kick(targetUser)
                 .reason(reason)
                 .queue(
-
-                  success -> event.reply("Пользователь " + targetUser.getAsTag() + "Кикнуть. Причина: " + reason).queue(),
-                        error ->{
-                                log.error("Не удалось кикнуть пользователя {}", targetUser.getAsTag(), error);
-                                event.reply("Не удалось кикнуть пользователя: " + error.getMessage()).setEphemeral(true).queue();}
-
+                        success -> event.reply("Пользователь " + targetUser.getAsTag() + "Кикнуть. Причина: " + reason).queue(),
+                        error -> {
+                            log.error("Не удалось кикнуть пользователя {}", targetUser.getAsTag(), error);
+                            event.reply("Не удалось кикнуть пользователя: " + error.getMessage()).setEphemeral(true).queue();
+                        }
                 );
     }
+
 }
